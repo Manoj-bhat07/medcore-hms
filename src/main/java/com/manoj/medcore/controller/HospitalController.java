@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.manoj.medcore.dto.HospitalRequestDTO;
+import com.manoj.medcore.dto.HospitalResponseDTO;
+import com.manoj.medcore.dto.HospitalUpdateDTO;
 import com.manoj.medcore.model.Hospital;
 import com.manoj.medcore.service.HospitalService;
 
@@ -23,37 +26,56 @@ private final HospitalService hospitalService;
 public HospitalController(HospitalService hospitalService) {
     this.hospitalService = hospitalService;
 }
-    private Hospital hospital;
-    @PostMapping
-public Hospital createHospital(@RequestBody Hospital hospital) {
-    return hospitalService.createHospital(hospital);
+
+
+  @PostMapping
+public ResponseEntity<HospitalResponseDTO> createHospital(
+        @RequestBody HospitalRequestDTO hospitalDTO) {
+
+  Hospital createdHospital =
+        hospitalService.createHospital(hospitalDTO);
+
+    HospitalResponseDTO responseDTO = new HospitalResponseDTO();
+
+    responseDTO.setId(createdHospital.getId());
+    responseDTO.setName(createdHospital.getName());
+    responseDTO.setCity(createdHospital.getCity());
+
+    return ResponseEntity.status(201).body(responseDTO);
 }
 
-    @GetMapping
-public List<Hospital> getHospitals() {
-    return hospitalService.getHospitals();
+   @GetMapping
+public List<HospitalResponseDTO> getHospitals() {
+    return hospitalService.getHospitalResponses();
 }
     @GetMapping("/search")
     public String searchHospital(@RequestParam String city) {
     return "Searching hospitals in " + city;
     }
     
-@PutMapping("/{id}")
-public ResponseEntity<Hospital> updateHospital(
+        @PutMapping("/{id}")
+public ResponseEntity<HospitalResponseDTO> updateHospital(
         @PathVariable Long id,
-        @RequestBody Hospital updatedHospital) {
+        @RequestBody HospitalUpdateDTO updatedHospitalDTO) {
 
-    Hospital hospital = hospitalService.updateHospital(id, updatedHospital);
+    Hospital hospital = hospitalService.updateHospital(id, updatedHospitalDTO);
 
     if (hospital == null) {
         return ResponseEntity.notFound().build();
     }
 
-    return ResponseEntity.ok(hospital);
+    HospitalResponseDTO responseDTO = new HospitalResponseDTO();
+
+    responseDTO.setId(hospital.getId());
+    responseDTO.setName(hospital.getName());
+    responseDTO.setCity(hospital.getCity());
+
+    return ResponseEntity.ok(responseDTO);
 }
 
-    @GetMapping("/{id}")
-public ResponseEntity<Hospital> getHospitalById(@PathVariable Long id) {
+        @GetMapping("/{id}")
+public ResponseEntity<HospitalResponseDTO> getHospitalById(
+        @PathVariable Long id) {
 
     Hospital hospital = hospitalService.getHospitalById(id);
 
@@ -61,7 +83,13 @@ public ResponseEntity<Hospital> getHospitalById(@PathVariable Long id) {
         return ResponseEntity.notFound().build();
     }
 
-    return ResponseEntity.ok(hospital);
+    HospitalResponseDTO responseDTO = new HospitalResponseDTO();
+
+    responseDTO.setId(hospital.getId());
+    responseDTO.setName(hospital.getName());
+    responseDTO.setCity(hospital.getCity());
+
+    return ResponseEntity.ok(responseDTO);
 }
 
 

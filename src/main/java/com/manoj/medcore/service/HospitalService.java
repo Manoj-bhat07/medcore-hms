@@ -6,26 +6,54 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.manoj.medcore.dto.HospitalRequestDTO;
+import com.manoj.medcore.dto.HospitalResponseDTO;
+import com.manoj.medcore.dto.HospitalUpdateDTO;
 import com.manoj.medcore.model.Hospital;
+
 
 @Service
 public class HospitalService {
 
-    private List<Hospital> hospitals = new ArrayList<>();
+    private final List<Hospital> hospitals = new ArrayList<>();
      private Long nextId = 1L;
-    
-    public Hospital createHospital(Hospital hospital) {
 
-        hospital.setId(nextId++);
 
-        hospitals.add(hospital);
+    public Hospital createHospital(HospitalRequestDTO hospitalDTO) {
 
-        return hospital;
+    Hospital hospital = new Hospital();
+
+    hospital.setName(hospitalDTO.getName());
+    hospital.setCity(hospitalDTO.getCity());
+
+    hospital.setId(nextId++);
+
+    hospitals.add(hospital);
+
+    return hospital;
     }
+    public List<HospitalResponseDTO> getHospitalResponses() {
+
+    List<HospitalResponseDTO> responseList = new ArrayList<>();
+
+    for (Hospital hospital : hospitals) {
+
+        HospitalResponseDTO responseDTO = new HospitalResponseDTO();
+
+        responseDTO.setId(hospital.getId());
+        responseDTO.setName(hospital.getName());
+        responseDTO.setCity(hospital.getCity());
+
+        responseList.add(responseDTO);
+    }
+
+    return responseList;
+}
 
     public List<Hospital> getHospitals() {
         return hospitals;
     }
+
 
     public Hospital getHospitalById(Long id) {
 
@@ -39,19 +67,16 @@ public class HospitalService {
     return null;
 }
 
-public Hospital updateHospital(Long id, Hospital updatedHospital) {
 
+
+    public Hospital updateHospital(Long id, HospitalUpdateDTO updatedHospitalDTO) {
     for (Hospital hospital : hospitals) {
-
         if (hospital.getId().equals(id)) {
-
-            hospital.setName(updatedHospital.getName());
-            hospital.setCity(updatedHospital.getCity());
-
+            hospital.setName(updatedHospitalDTO.getName());
+            hospital.setCity(updatedHospitalDTO.getCity());
             return hospital;
         }
     }
-
     return null;
 }
 
