@@ -1,4 +1,5 @@
 package com.manoj.medcore.controller;
+
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -15,92 +16,65 @@ import org.springframework.web.bind.annotation.RestController;
 import com.manoj.medcore.dto.HospitalRequestDTO;
 import com.manoj.medcore.dto.HospitalResponseDTO;
 import com.manoj.medcore.dto.HospitalUpdateDTO;
-import com.manoj.medcore.model.Hospital;
 import com.manoj.medcore.service.HospitalService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/hospitals")
 public class HospitalController {
-private final HospitalService hospitalService;
 
-public HospitalController(HospitalService hospitalService) {
-    this.hospitalService = hospitalService;
-}
+    private final HospitalService hospitalService;
 
+    public HospitalController(HospitalService hospitalService) {
+        this.hospitalService = hospitalService;
+    }
 
-  @PostMapping
+   @PostMapping
 public ResponseEntity<HospitalResponseDTO> createHospital(
-        @RequestBody HospitalRequestDTO hospitalDTO) {
+        @Valid @RequestBody HospitalRequestDTO hospitalDTO) {
 
-  Hospital createdHospital =
-        hospitalService.createHospital(hospitalDTO);
+        HospitalResponseDTO responseDTO =
+                hospitalService.createHospital(hospitalDTO);
 
-    HospitalResponseDTO responseDTO = new HospitalResponseDTO();
+        return ResponseEntity.status(201).body(responseDTO);
+    }
 
-    responseDTO.setId(createdHospital.getId());
-    responseDTO.setName(createdHospital.getName());
-    responseDTO.setCity(createdHospital.getCity());
+    @GetMapping
+    public List<HospitalResponseDTO> getHospitals() {
+        return hospitalService.getAllHospitals();
+    }
 
-    return ResponseEntity.status(201).body(responseDTO);
-}
-
-   @GetMapping
-public List<HospitalResponseDTO> getHospitals() {
-    return hospitalService.getHospitalResponses();
-}
     @GetMapping("/search")
     public String searchHospital(@RequestParam String city) {
-    return "Searching hospitals in " + city;
-    }
-    
-        @PutMapping("/{id}")
-public ResponseEntity<HospitalResponseDTO> updateHospital(
-        @PathVariable Long id,
-        @RequestBody HospitalUpdateDTO updatedHospitalDTO) {
-
-    Hospital hospital = hospitalService.updateHospital(id, updatedHospitalDTO);
-
-    if (hospital == null) {
-        return ResponseEntity.notFound().build();
+        return "Searching hospitals in " + city;
     }
 
-    HospitalResponseDTO responseDTO = new HospitalResponseDTO();
+    @PutMapping("/{id}")
+    public ResponseEntity<HospitalResponseDTO> updateHospital(
+            @PathVariable Long id,
+            @RequestBody HospitalUpdateDTO updatedHospitalDTO) {
 
-    responseDTO.setId(hospital.getId());
-    responseDTO.setName(hospital.getName());
-    responseDTO.setCity(hospital.getCity());
+        HospitalResponseDTO responseDTO =
+                hospitalService.updateHospital(id, updatedHospitalDTO);
 
-    return ResponseEntity.ok(responseDTO);
-}
-
-        @GetMapping("/{id}")
-public ResponseEntity<HospitalResponseDTO> getHospitalById(
-        @PathVariable Long id) {
-
-    Hospital hospital = hospitalService.getHospitalById(id);
-
-    if (hospital == null) {
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(responseDTO);
     }
 
-    HospitalResponseDTO responseDTO = new HospitalResponseDTO();
+    @GetMapping("/{id}")
+    public ResponseEntity<HospitalResponseDTO> getHospitalById(
+            @PathVariable Long id) {
 
-    responseDTO.setId(hospital.getId());
-    responseDTO.setName(hospital.getName());
-    responseDTO.setCity(hospital.getCity());
+        HospitalResponseDTO responseDTO =
+                hospitalService.getHospitalById(id);
 
-    return ResponseEntity.ok(responseDTO);
-}
+        return ResponseEntity.ok(responseDTO);
+    }
 
-
-@DeleteMapping("/{id}")
+  @DeleteMapping("/{id}")
 public ResponseEntity<String> deleteHospital(@PathVariable Long id) {
 
-    boolean deleted = hospitalService.deleteHospital(id);
-
-    if (!deleted) {
-        return ResponseEntity.notFound().build();
-    }
+    hospitalService.deleteHospital(id);
 
     return ResponseEntity.ok("Hospital with ID " + id + " deleted");
 }

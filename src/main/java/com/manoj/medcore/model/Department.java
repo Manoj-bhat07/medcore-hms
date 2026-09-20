@@ -1,37 +1,39 @@
 package com.manoj.medcore.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "hospitals")
-public class Hospital {
+@Table(name = "departments")
+public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
-    private String city;
+    @ManyToOne
+    @JoinColumn(name = "hospital_id", nullable = false)
+    private Hospital hospital;
 
-    public Hospital() {
+    public Department() {
     }
 
-    public Hospital(String name, String city) {
+    public Department(String name, Hospital hospital) {
         this.name = name;
-        this.city = city;
+        this.hospital = hospital;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -42,11 +44,11 @@ public class Hospital {
         this.name = name;
     }
 
-    public String getCity() {
-        return city;
+    public Hospital getHospital() {
+        return hospital;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
     }
 }
