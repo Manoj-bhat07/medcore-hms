@@ -41,4 +41,13 @@ public ResponseEntity<String> handleAppointmentNotFound(
             .status(HttpStatus.NOT_FOUND)
             .body(ex.getMessage());
 }
+
+@ExceptionHandler(MedicalRecordNotFoundException.class)
+public ResponseEntity<String> handleMedicalRecordNotFound(
+        MedicalRecordNotFoundException ex) {
+
+    return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(ex.getMessage());
+}
 }
