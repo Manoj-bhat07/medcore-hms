@@ -50,4 +50,13 @@ public ResponseEntity<String> handleMedicalRecordNotFound(
             .status(HttpStatus.NOT_FOUND)
             .body(ex.getMessage());
 }
+
+@ExceptionHandler(PrescriptionNotFoundException.class)
+public ResponseEntity<String> handlePrescriptionNotFound(
+        PrescriptionNotFoundException ex) {
+
+    return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(ex.getMessage());
+}
 }
