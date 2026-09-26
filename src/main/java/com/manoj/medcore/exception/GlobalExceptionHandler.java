@@ -59,4 +59,13 @@ public ResponseEntity<String> handlePrescriptionNotFound(
             .status(HttpStatus.NOT_FOUND)
             .body(ex.getMessage());
 }
+
+@ExceptionHandler(BillingNotFoundException.class)
+public ResponseEntity<String> handleBillingNotFound(
+        BillingNotFoundException ex) {
+
+    return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(ex.getMessage());
+}
 }
