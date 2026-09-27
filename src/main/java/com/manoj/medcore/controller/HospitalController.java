@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.manoj.medcore.dto.HospitalPageResponseDTO;
 import com.manoj.medcore.dto.HospitalRequestDTO;
 import com.manoj.medcore.dto.HospitalResponseDTO;
 import com.manoj.medcore.dto.HospitalUpdateDTO;
@@ -46,8 +47,15 @@ public ResponseEntity<HospitalResponseDTO> createHospital(
     }
 
     @GetMapping("/search")
-    public String searchHospital(@RequestParam String city) {
-        return "Searching hospitals in " + city;
+    public List<HospitalResponseDTO> searchHospital(@RequestParam String city) {
+        return hospitalService.searchHospitalsByCity(city);
+    }
+
+    @GetMapping("/page")
+    public HospitalPageResponseDTO getHospitalsPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return hospitalService.getHospitalsPage(page, size);
     }
 
     @PutMapping("/{id}")

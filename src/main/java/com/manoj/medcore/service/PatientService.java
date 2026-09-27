@@ -3,8 +3,12 @@ package com.manoj.medcore.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.manoj.medcore.dto.PatientPageResponseDTO;
 import com.manoj.medcore.dto.PatientRequestDTO;
 import com.manoj.medcore.dto.PatientResponseDTO;
 import com.manoj.medcore.dto.PatientUpdateDTO;
@@ -47,6 +51,17 @@ public class PatientService {
 
         List<PatientResponseDTO> responseList =
                 new ArrayList<>();
+
+        for (Patient patient : patients) {
+            responseList.add(mapToResponse(patient));
+        }
+
+        return responseList;
+    }
+
+    public List<PatientResponseDTO> searchPatientsByName(String name) {
+        List<Patient> patients = patientRepository.findByNameContainingIgnoreCase(name);
+        List<PatientResponseDTO> responseList = new ArrayList<>();
 
         for (Patient patient : patients) {
             responseList.add(mapToResponse(patient));
@@ -103,6 +118,33 @@ public class PatientService {
                                                 + id));
 
         patientRepository.delete(patient);
+    }
+
+    public PatientPageResponseDTO getPatientsPage(int page, int size) {
+        if (page < 0) {
+            throw new IllegalArgumentException("Page number cannot be negative");
+        }
+
+        if (size <= 0) {
+            throw new IllegalArgumentException("Page size must be greater than zero");
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Patient> patientPage = patientRepository.findAll(pageable);
+
+        List<PatientResponseDTO> content = new ArrayList<>();
+        for (Patient patient : patientPage.getContent()) {
+            content.add(mapToResponse(patient));
+        }
+
+        PatientPageResponseDTO responseDTO = new PatientPageResponseDTO();
+        responseDTO.setContent(content);
+        responseDTO.setPage(patientPage.getNumber());
+        responseDTO.setSize(patientPage.getSize());
+        responseDTO.setTotalElements(patientPage.getTotalElements());
+        responseDTO.setTotalPages(patientPage.getTotalPages());
+
+        return responseDTO;
     }
 
     // DTO MAPPING

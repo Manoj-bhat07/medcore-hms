@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -15,57 +16,67 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
     }
+
     @ExceptionHandler(DepartmentNotFoundException.class)
-public ResponseEntity<String> handleDepartmentNotFound(
-        DepartmentNotFoundException ex) {
+    public ResponseEntity<String> handleDepartmentNotFound(
+            DepartmentNotFoundException ex) {
 
-    return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(ex.getMessage());
-}
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
 
-@ExceptionHandler(PatientNotFoundException.class)
-public ResponseEntity<String> handlePatientNotFound(
-        PatientNotFoundException ex) {
+    @ExceptionHandler(PatientNotFoundException.class)
+    public ResponseEntity<String> handlePatientNotFound(
+            PatientNotFoundException ex) {
 
-    return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(ex.getMessage());
-}
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
 
-@ExceptionHandler(AppointmentNotFoundException.class)
-public ResponseEntity<String> handleAppointmentNotFound(
-        AppointmentNotFoundException ex) {
+    @ExceptionHandler(AppointmentNotFoundException.class)
+    public ResponseEntity<String> handleAppointmentNotFound(
+            AppointmentNotFoundException ex) {
 
-    return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(ex.getMessage());
-}
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
 
-@ExceptionHandler(MedicalRecordNotFoundException.class)
-public ResponseEntity<String> handleMedicalRecordNotFound(
-        MedicalRecordNotFoundException ex) {
+    @ExceptionHandler(MedicalRecordNotFoundException.class)
+    public ResponseEntity<String> handleMedicalRecordNotFound(
+            MedicalRecordNotFoundException ex) {
 
-    return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(ex.getMessage());
-}
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
 
-@ExceptionHandler(PrescriptionNotFoundException.class)
-public ResponseEntity<String> handlePrescriptionNotFound(
-        PrescriptionNotFoundException ex) {
+    @ExceptionHandler(PrescriptionNotFoundException.class)
+    public ResponseEntity<String> handlePrescriptionNotFound(
+            PrescriptionNotFoundException ex) {
 
-    return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(ex.getMessage());
-}
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
 
-@ExceptionHandler(BillingNotFoundException.class)
-public ResponseEntity<String> handleBillingNotFound(
-        BillingNotFoundException ex) {
+    @ExceptionHandler(BillingNotFoundException.class)
+    public ResponseEntity<String> handleBillingNotFound(
+            BillingNotFoundException ex) {
 
-    return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(ex.getMessage());
-}
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(
+            IllegalArgumentException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
 }

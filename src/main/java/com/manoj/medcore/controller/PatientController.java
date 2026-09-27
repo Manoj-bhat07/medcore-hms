@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.manoj.medcore.dto.PatientPageResponseDTO;
 import com.manoj.medcore.dto.PatientRequestDTO;
 import com.manoj.medcore.dto.PatientResponseDTO;
 import com.manoj.medcore.dto.PatientUpdateDTO;
@@ -47,6 +49,21 @@ public class PatientController {
     public List<PatientResponseDTO> getPatients() {
 
         return patientService.getAllPatients();
+    }
+
+    @GetMapping("/search")
+    public List<PatientResponseDTO> searchPatient(
+            @RequestParam String name) {
+
+        return patientService.searchPatientsByName(name);
+    }
+
+    @GetMapping("/page")
+    public PatientPageResponseDTO getPatientsPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        return patientService.getPatientsPage(page, size);
     }
 
     // GET BY ID
